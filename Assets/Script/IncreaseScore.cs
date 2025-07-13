@@ -6,6 +6,7 @@ public class IncreaseScore : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            SoundManager.Instance.EarnCoinSound();
             Score.instance.UpdateScore();
         }
     }

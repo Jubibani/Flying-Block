@@ -15,20 +15,34 @@ public class FlyBehavior : MonoBehaviour
 
     private void Update()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        // Mouse click
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            _rb.linearVelocity = Vector2.up * _velocity;
-            Debug.Log("Mouse Clicked");
+            Fly();
         }
+
+        // Touch (for mobile)
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+        {
+            Fly();
+        }
+    }
+
+    private void Fly()
+    {
+        _rb.linearVelocity = Vector2.up * _velocity;
+        SoundManager.Instance.FlySound();
+        Debug.Log("Fly triggered");
     }
 
     private void FixedUpdate()
     {
-        transform.rotation = Quaternion.Euler(0, 0, _rb.linearVelocity.y * _rotationSpeed); ;
+        transform.rotation = Quaternion.Euler(0, 0, _rb.linearVelocity.y * _rotationSpeed);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {   
+    {
+        SoundManager.Instance.HitObstacleSound();
         GameManager.instance.GameOver();
     }
 }
